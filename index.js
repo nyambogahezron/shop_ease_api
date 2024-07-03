@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const bodyParser = require('body-parser');
 const express = require('express');
+const connectionDB = require('./controllers/connectDB');
 const app = express();
 
 // Middlewares
@@ -16,6 +17,9 @@ app.get('/', (req, res) => {
 
 // Start application
 const port = process.env.SERVER_PORT || 3000;
+
+
+connectionDB();
 
 const startApp = async () => {
   try {
