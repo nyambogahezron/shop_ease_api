@@ -1,11 +1,21 @@
 require('dotenv').config();
-require('express-async-errors');
 
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 
-// start application
-const port = process.env.PORT || 5000;
+// Middlewares
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('shop ease api');
+});
+
+// Start application
+const port = process.env.SERVER_PORT || 3000;
 
 const startApp = async () => {
   try {
@@ -13,7 +23,7 @@ const startApp = async () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
