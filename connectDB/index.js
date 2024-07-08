@@ -1,4 +1,3 @@
-// db.js
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -30,4 +29,4 @@ const connectionDB = () => {
   });
 };
 
-module.exports = connectionDB;
+module.exports = { connectionDB, pool};
