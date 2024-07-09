@@ -10,6 +10,7 @@ const { connectionDB } = require('./connectDB');
 // Routes
 const authRoutes = require('./routes/authRoutes.js');
 const productsRoutes = require('./routes/productsRoutes.js');
+const ordersRoutes = require('./routes/ordersRoutes.js');
 
 // Middlewares
 app.use(express.json());
@@ -20,10 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const notFoundMiddleware = require('./middleware/not-found.js');
 
-
-// Routes 
+// Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productsRoutes);
+app.use('/api/v1/orders', ordersRoutes);
 
 app.get('/', (req, res) => {
   res.send('shop ease api');
