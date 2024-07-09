@@ -5,3 +5,5 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL CHECK (char_length(password) >= 6),
     role VARCHAR(50) NOT NULL DEFAULT 'user' CHECK (role IN ('admin', 'user'))
 );
+
+ALTER TABLE users ADD CONSTRAINT email_format_check CHECK (email ~* '^[^@]+@[^@]+\.[^@]{2,}$');

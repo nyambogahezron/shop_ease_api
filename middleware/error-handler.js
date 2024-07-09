@@ -24,7 +24,19 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 
   // Handling check violation
   if (err.code === '23514') {
-    customError.msg = 'Check constraint violation';
+    let customMessage = 'Check constraint violation';
+
+    const constraintMessages = {
+      users_name_check: 'Name must be at least 3 characters long',
+      email_format_check: 'Email must be a valid email address.',
+    };
+
+    // Check if the error's constraint is in the map and use the custom message
+    if (constraintMessages[err.constraint]) {
+      customMessage = constraintMessages[err.constraint];
+    }
+
+    customError.msg = customMessage;
     customError.statusCode = StatusCodes.BAD_REQUEST;
   }
 

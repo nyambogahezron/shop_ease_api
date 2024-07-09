@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes middleware
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
-app.use('/api/v1/auth',authRoutes);
+app.use('/api/v1/auth', authRoutes);
 const notFoundMiddleware = require('./middleware/not-found.js');
 
 app.get('/', (req, res) => {
@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
 });
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);
+
 // Start application
 const port = process.env.SERVER_PORT || 3000;
 
