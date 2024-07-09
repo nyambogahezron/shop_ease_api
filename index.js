@@ -9,6 +9,7 @@ const { connectionDB } = require('./connectDB');
 
 // Routes
 const authRoutes = require('./routes/authRoutes.js');
+const productsRoutes = require('./routes/productsRoutes.js');
 
 // Middlewares
 app.use(express.json());
@@ -17,8 +18,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes middleware
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
-app.use('/api/v1/auth', authRoutes);
 const notFoundMiddleware = require('./middleware/not-found.js');
+
+
+// Routes 
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/products', productsRoutes);
 
 app.get('/', (req, res) => {
   res.send('shop ease api');

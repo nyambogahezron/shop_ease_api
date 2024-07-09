@@ -29,6 +29,8 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     const constraintMessages = {
       users_name_check: 'Name must be at least 3 characters long',
       email_format_check: 'Email must be a valid email address.',
+      products_category_check: 'Invalid category value',
+      products_company_check: 'Invalid company value',
     };
 
     // Check if the error's constraint is in the map and use the custom message
