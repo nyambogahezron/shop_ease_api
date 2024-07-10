@@ -7,11 +7,11 @@ const {
   getCurrentUserOrders,
   createOrder,
   updateOrder,
-} = require('../controllers/orderController');
+} = require('../controllers/ordersController.js');
 
 router.route('/').post(createOrder).get(getAllOrders);
 
-router.get('/orders/:id', getCurrentUserOrders);
+router.get('/user/:id', getCurrentUserOrders);
 
 router.route('/:id').get(getSingleOrder).patch(updateOrder);
 
