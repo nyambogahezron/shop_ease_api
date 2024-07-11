@@ -125,11 +125,23 @@ const getCurrentUserOrders = asyncWrapper(async (req, res) => {
 });
 
 
- // TODO
-const updateOrder = async (req, res) => {
-  const { id: orderId } = req.params;
-  const { paymentIntentId } = req.body;
 
+// @desc    Update Order status
+// @endpoint   PUT /api/v1/orders/:id
+// @access  Private
+
+const updateOrder = asyncWrapper(async (req, res) => {
+  const { id: orderId } = req.params;
+  const { status } = req.body;
+  const userId = 5;
+
+  if (!userId) {
+    throw new CustomError.UnauthorizedError(
+      'You are not authorized to perform this action'
+    );
+  }
+
+  // check if order exists
   const query = 'SELECT * FROM orders WHERE id = $1';
   const values = [orderId];
   const result = await pool.query(query, values);
@@ -138,19 +150,16 @@ const updateOrder = async (req, res) => {
     throw new CustomError.NotFoundError(`No order with id : ${orderId}`);
   }
 
-  checkPermissions(req.user, result.rows[0].user_id);
-
-  const updateQuery = `
-    UPDATE orders
-    SET payment_intent_id = $1, status = 'paid'
-    WHERE id = $2
-    RETURNING *;
+  const updateQuery = `UPDATE orders
+   SET status = $1
+   WHERE id = $2
+   RETURNING *;
   `;
-  const updateValues = [paymentIntentId, orderId];
+  const updateValues = [status, orderId];
   const updateResult = await pool.query(updateQuery, updateValues);
 
   res.status(StatusCodes.OK).json({ order: updateResult.rows[0] });
-};
+});
 
 module.exports = {
   getAllOrders,
