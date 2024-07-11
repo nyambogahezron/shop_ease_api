@@ -31,6 +31,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       email_format_check: 'Email must be a valid email address.',
       products_category_check: 'Invalid category value',
       products_company_check: 'Invalid company value',
+      reviews_product_id_fkey: 'Invalid product id',
     };
 
     // Check if the error's constraint is in the map and use the custom message
