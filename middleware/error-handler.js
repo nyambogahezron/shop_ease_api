@@ -33,6 +33,14 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       products_company_check: 'Invalid company value',
       reviews_product_id_fkey: 'Invalid product id',
     };
+  }
+
+  if (err.code === '23505') {
+    let customMessage = 'Check constraint violation';
+
+    const constraintMessages = {
+      users_email_key: 'Email already exists',
+    };
 
     // Check if the error's constraint is in the map and use the custom message
     if (constraintMessages[err.constraint]) {

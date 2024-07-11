@@ -12,6 +12,7 @@ const authRoutes = require('./routes/authRoutes.js');
 const productsRoutes = require('./routes/productsRoutes.js');
 const ordersRoutes = require('./routes/ordersRoutes.js');
 const reviewsRoutes = require('./routes/reviewsRoutes.js');
+const userRoutes = require('./routes/userRoutes.js');
 
 // Middlewares
 app.use(express.json());
@@ -26,7 +27,8 @@ const notFoundMiddleware = require('./middleware/not-found.js');
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productsRoutes);
 app.use('/api/v1/orders', ordersRoutes);
-app.use('/api/v1/reviews', reviewsRoutes);  
+app.use('/api/v1/reviews', reviewsRoutes); 
+app.use('/api/v1/users', userRoutes); 
 
 app.get('/', (req, res) => {
   res.send('shop ease api');
