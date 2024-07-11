@@ -47,7 +47,7 @@ const getSingleUser = asyncWrapper(async (req, res) => {
 const updateUser = asyncWrapper(async (req, res) => {
   const { id: userId } = req.params;
   const { name, email } = req.body;
-  const currentUser = 5; //TODO get user from req.user
+  const currentUser = '4'; //TODO get user from req.user
 
   //check if its user's own data
   if (currentUser !== userId) {
@@ -76,7 +76,9 @@ const updateUser = asyncWrapper(async (req, res) => {
 
 const updatePassword = asyncWrapper(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
-  const userId = 5; //TODO get user from req.user
+
+  console.log(oldPassword, newPassword);
+  const userId = 6; //TODO get user from req.user
 
   const selectQuery = 'SELECT * FROM users WHERE id = $1';
   const selectRes = await pool.query(selectQuery, [userId]);
@@ -92,6 +94,7 @@ const updatePassword = asyncWrapper(async (req, res) => {
     throw new CustomError.UnauthenticatedError('Invalid Credentials');
   }
 
+  // Hash new password and  update in db
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   const updateQuery = 'UPDATE users SET password = $1 WHERE id = $2';
   await pool.query(updateQuery, [hashedPassword, userId]);
