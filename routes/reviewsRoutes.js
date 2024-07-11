@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const {
   createReview,
-  getAllReviews,
+  getAllProductsReviews,
   getSingleReview,
   updateReview,
   deleteReview,
@@ -10,7 +10,7 @@ const {
 
 router.post('/', createReview);
 
-router.get('/:product_id', getAllReviews);
+router.get('/:product_id', getAllProductsReviews);
 
 router
   .route('/item/:review_id')

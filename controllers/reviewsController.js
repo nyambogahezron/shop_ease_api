@@ -3,6 +3,10 @@ const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const asyncWrapper = require('../middleware/asyncHandler');
 
+// @desc    Create a review
+// @endpoint   POST /api/v1/reviews
+// @access  Public
+
 const createReview = asyncWrapper(async (req, res) => {
   const { product_id, comment, rating, name } = req.body;
 
@@ -49,7 +53,11 @@ const createReview = asyncWrapper(async (req, res) => {
     .json({ msg: 'review added successful', review });
 });
 
-const getAllReviews = asyncWrapper(async (req, res) => {
+// @desc    Get all reviews for a product
+// @endpoint   GET /api/v1/products/:product_id/reviews
+// @access  Public
+
+const getAllProductsReviews = asyncWrapper(async (req, res) => {
   const { product_id } = req.params;
 
   const query = 'SELECT * FROM reviews WHERE product_id = $1';
@@ -62,6 +70,10 @@ const getAllReviews = asyncWrapper(async (req, res) => {
 
   res.status(StatusCodes.OK).json({ reviews });
 });
+
+// @desc    Get a single review
+// @endpoint   GET /api/v1/reviews/:review_id
+// @access  Public
 
 const getSingleReview = asyncWrapper(async (req, res) => {
   const { review_id } = req.params;
@@ -77,6 +89,9 @@ const getSingleReview = asyncWrapper(async (req, res) => {
   res.status(StatusCodes.OK).json({ review });
 });
 
+// @desc    Update a review
+// @endpoint   PATCH /api/v1/reviews/:review_id
+// @access  Private
 const updateReview = asyncWrapper(async (req, res) => {
   const { review_id } = req.params;
   const { comment, rating } = req.body;
@@ -110,6 +125,9 @@ const updateReview = asyncWrapper(async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'review updated successful', review });
 });
 
+// @desc    Delete a review
+// @endpoint   DELETE /api/v1/reviews/:review_id
+// @access  Private
 const deleteReview = asyncWrapper(async (req, res) => {
   const { review_id } = req.params;
 
@@ -132,7 +150,7 @@ const deleteReview = asyncWrapper(async (req, res) => {
 
 module.exports = {
   createReview,
-  getAllReviews,
+  getAllProductsReviews,
   getSingleReview,
   updateReview,
   deleteReview,
