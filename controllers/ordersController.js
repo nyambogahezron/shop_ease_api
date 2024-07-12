@@ -8,7 +8,8 @@ const asyncWrapper = require('../middleware/asyncHandler');
 // @access  Public
 
 const createOrder = asyncWrapper(async (req, res) => {
-  const userId = 5;
+  const userId = req.user.id;
+
   const paymentIntent = 102;
   const client_secret = 'user_secret';
 
@@ -81,7 +82,8 @@ const createOrder = asyncWrapper(async (req, res) => {
 
 // @desc    Get All Order
 // @endpoint   GET /api/v1/orders
-// @access  Public
+// @access  Public 
+//TODO: Add protect middleware admin only
 
 const getAllOrders = asyncWrapper(async (req, res) => {
   const query = 'SELECT * FROM orders';
@@ -94,7 +96,8 @@ const getAllOrders = asyncWrapper(async (req, res) => {
 
 // @desc    Get single Order
 // @endpoint   GET /api/v1/orders/:id
-// @access  Public
+// @access  Private 
+// TODO: Add protect middleware --admin and current user
 
 const getSingleOrder = asyncWrapper(async (req, res) => {
   const { id: orderId } = req.params;
@@ -114,7 +117,7 @@ const getSingleOrder = asyncWrapper(async (req, res) => {
 // @access  Public
 
 const getCurrentUserOrders = asyncWrapper(async (req, res) => {
-  const { id: userId } = req.params;
+  const userId = req.user.id;
   const query = 'SELECT * FROM orders WHERE user_id = $1';
   const values = [userId];
   const result = await pool.query(query, values);
@@ -129,17 +132,13 @@ const getCurrentUserOrders = asyncWrapper(async (req, res) => {
 // @desc    Update Order status
 // @endpoint   PUT /api/v1/orders/:id
 // @access  Private
+// TODO: Add protect middleware --admin only
 
 const updateOrder = asyncWrapper(async (req, res) => {
   const { id: orderId } = req.params;
   const { status } = req.body;
-  const userId = 5;
+  const userId = req.user.id;
 
-  if (!userId) {
-    throw new CustomError.UnauthorizedError(
-      'You are not authorized to perform this action'
-    );
-  }
 
   // check if order exists
   const query = 'SELECT * FROM orders WHERE id = $1';
