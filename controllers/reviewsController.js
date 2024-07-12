@@ -8,15 +8,10 @@ const asyncWrapper = require('../middleware/asyncHandler');
 // @access  Public
 
 const createReview = asyncWrapper(async (req, res) => {
-  const { product_id, comment, rating, name } = req.body;
+  const { product_id, comment, rating } = req.body;
 
-  // TODO -- name and user_id should be retrieved from the logged in user (jwt)
-
-  const userId = 5;
-
-  if (!userId) {
-    throw new CustomError.UnauthenticatedError('Unauthorized');
-  }
+  const userId = req.user.id;
+  const name = req.user.name;
 
   if (!product_id || !comment || !rating) {
     throw new CustomError.BadRequestError('All fields are required');
@@ -96,10 +91,19 @@ const updateReview = asyncWrapper(async (req, res) => {
   const { review_id } = req.params;
   const { comment, rating } = req.body;
 
-  const userId = 5; // TODO -- user_id should be retrieved from the logged in user (jwt)
+  const userId = req.user.id;
 
   if (!comment || !rating) {
     throw new CustomError.BadRequestError('All fields are required');
+  }
+
+  //check if review exists
+  const reviewExistQuery = 'SELECT * FROM reviews WHERE id = $1';
+  const reviewExistResult = await pool.query(reviewExistQuery, [review_id]);
+  const reviewExist = reviewExistResult.rows[0];
+
+  if (!reviewExist) {
+    throw new CustomError.NotFoundError('Review not found');
   }
 
   //check if its user's review
@@ -131,7 +135,16 @@ const updateReview = asyncWrapper(async (req, res) => {
 const deleteReview = asyncWrapper(async (req, res) => {
   const { review_id } = req.params;
 
-  const userId = 5; // TODO -- user_id should be retrieved from the logged in user (jwt)
+  const userId = req.user.id;
+
+  //check if review exists
+  const reviewExistQuery = 'SELECT * FROM reviews WHERE id = $1';
+  const reviewExistResult = await pool.query(reviewExistQuery, [review_id]);
+  const reviewExist = reviewExistResult.rows[0];
+
+  if (!reviewExist) {
+    throw new CustomError.NotFoundError('Review not found');
+  }
 
   const query =
     'DELETE FROM reviews WHERE id = $1 AND user_id = $2 RETURNING *';
