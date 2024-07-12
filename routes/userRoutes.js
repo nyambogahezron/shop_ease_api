@@ -7,11 +7,17 @@ const {
   updatePassword,
   getCurrentUser,
 } = require('../controllers/userController');
+const { protect, adminProtect } = require('../middleware/authMiddleware');
 
-router.get('/', getAllUsers);
+router
+  .route('/')
+  .get(protect, adminProtect, getAllUsers)
+  .patch(protect, updateUser);
 
-router.route('/:id').get(getSingleUser).patch(updateUser);
+router.route('/:id').get(protect, getSingleUser);
 
-router.patch('/update-password/:id', updatePassword);
+router.patch('/update-password/:id', protect, updatePassword);
+
+router.get('/user', protect, getCurrentUser);
 
 module.exports = router;

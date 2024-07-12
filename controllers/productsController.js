@@ -6,15 +6,9 @@ const asyncWrapper = require('../middleware/asyncHandler');
 
 // @desc   create a product
 // @endpoint   POST /api/v1/auth/products
-// @access  Public
+// @access  Private/Admin
 
 const createProduct = asyncWrapper(async (req, res) => {
-  const user = 5;
-
-  if (!user) {
-    throw new CustomError.UnauthorizedError('Please login to create a product');
-  }
-
   const {
     name,
     price,
@@ -32,8 +26,8 @@ const createProduct = asyncWrapper(async (req, res) => {
   } = req.body;
 
   const query = `
-    INSERT INTO products (name, price, discount, description, image, category, company, colors, featured, freeShipping, inventory, averageRating, numOfReviews, "user")
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    INSERT INTO products (name, price, discount, description, image, category, company, colors, featured, freeShipping, inventory, averageRating, numOfReviews)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     RETURNING *;
   `;
   const values = [
@@ -50,7 +44,6 @@ const createProduct = asyncWrapper(async (req, res) => {
     inventory,
     averageRating,
     numOfReviews,
-    user,
   ];
 
   const result = await pool.query(query, values);
@@ -89,7 +82,7 @@ const getSingleProduct = asyncWrapper(async (req, res) => {
 
 // @desc   update product
 // @endpoint   PATCH /api/v1/auth/products/:id
-// @access  Public
+// @access  Private/Admin
 
 const updateProduct = asyncWrapper(async (req, res) => {
   const { id: productId } = req.params;
@@ -145,7 +138,7 @@ const updateProduct = asyncWrapper(async (req, res) => {
 
 // @desc   delete product
 // @endpoint   DELETE /api/v1/auth/products/:id
-// @access  Public
+// @access  Private/Admin
 
 const deleteProduct = async (req, res) => {
   const { id: productId } = req.params;
@@ -160,7 +153,6 @@ const deleteProduct = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ msg: 'Success! Product removed.' });
 };
-
 
 // TODO: Add uploadImage function
 

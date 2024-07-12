@@ -10,7 +10,7 @@ const protect = asyncWrapper(async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-     
+
       const query = 'SELECT * FROM users WHERE id = $1';
       const results = await pool.query(query, [decoded.userId]);
       const user = results.rows[0];
@@ -38,4 +38,15 @@ const protect = asyncWrapper(async (req, res, next) => {
   }
 });
 
-module.exports = { protect };
+// admin middleware
+
+const adminProtect = asyncWrapper(async (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(401);
+    throw new CustomError.UnauthenticatedError('Not authorized as an admin');
+  }
+});
+
+module.exports = { protect, adminProtect };

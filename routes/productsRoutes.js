@@ -10,10 +10,17 @@ const {
   uploadImage,
 } = require('../controllers/productsController');
 
+const { protect, adminProtect } = require('../middleware/authMiddleware');
 
-router.route('/').post(createProduct).get(getAllProducts);
+router
+  .route('/')
+  .post(protect, adminProtect, createProduct)
+  .get(getAllProducts);
 
-router.route('/:id').get(getSingleProduct).patch(updateProduct).delete(deleteProduct);
-
+router
+  .route('/:id')
+  .get(getSingleProduct)
+  .patch(protect, adminProtect, updateProduct)
+  .delete(protect, adminProtect, deleteProduct);
 
 module.exports = router;

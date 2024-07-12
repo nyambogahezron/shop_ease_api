@@ -6,7 +6,7 @@ const asyncWrapper = require('../middleware/asyncHandler');
 
 // @desc    Get all users
 // @endpoint   GET /api/v1/users
-// @access  Private
+// @access  Private/admin
 
 const getAllUsers = asyncWrapper(async (req, res) => {
   const getUsersQuery = 'SELECT * FROM users';
@@ -45,12 +45,11 @@ const getSingleUser = asyncWrapper(async (req, res) => {
 // @access  Private
 
 const updateUser = asyncWrapper(async (req, res) => {
-  const { id: userId } = req.params;
   const { name, email } = req.body;
-  const currentUser = '4'; //TODO get user from req.user
+  const currentUser = req.user.id;
 
   //check if its user's own data
-  if (currentUser !== userId) {
+  if (!currentUser) {
     throw new CustomError.UnauthorizedError(
       'Not authorized to update this user'
     );
@@ -58,10 +57,14 @@ const updateUser = asyncWrapper(async (req, res) => {
 
   const updateUserQuery =
     'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *';
-  const { rows } = await pool.query(updateUserQuery, [name, email, userId]);
+  const { rows } = await pool.query(updateUserQuery, [
+    name,
+    email,
+    currentUser,
+  ]);
 
   if (rows.length === 0) {
-    throw new CustomError.NotFoundError(`No user with id : ${userId}`);
+    throw new CustomError.NotFoundError(`No user with id : ${currentUser}`);
   }
 
   const user = rows[0];
@@ -78,7 +81,7 @@ const updatePassword = asyncWrapper(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
   console.log(oldPassword, newPassword);
-  const userId = 6; //TODO get user from req.user
+  const userId = req.user.id;
 
   const selectQuery = 'SELECT * FROM users WHERE id = $1';
   const selectRes = await pool.query(selectQuery, [userId]);
@@ -107,8 +110,13 @@ const updatePassword = asyncWrapper(async (req, res) => {
 // @access  Private
 
 const getCurrentUser = asyncWrapper(async (req, res) => {
-  // TODO get user from req
-  res.send('user');
+  req.user;
+
+  if (!req.user) {
+    throw new CustomError.NotFoundError('No user found');
+  }
+
+  res.status(StatusCodes.OK).json(req.user.id, req.user.name, req.user.email);
 });
 
 module.exports = {
