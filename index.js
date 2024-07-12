@@ -3,6 +3,8 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 // database
 const { connectionDB } = require('./connectDB');
@@ -27,8 +29,8 @@ const notFoundMiddleware = require('./middleware/not-found.js');
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productsRoutes);
 app.use('/api/v1/orders', ordersRoutes);
-app.use('/api/v1/reviews', reviewsRoutes); 
-app.use('/api/v1/users', userRoutes); 
+app.use('/api/v1/reviews', reviewsRoutes);
+app.use('/api/v1/users', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('shop ease api');

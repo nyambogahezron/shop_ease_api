@@ -3,6 +3,7 @@ const { pool } = require('../connectDB');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const asyncWrapper = require('../middleware/asyncHandler');
+const jwt = require('jsonwebtoken');
 
 // @desc    Register user & get token
 // @endpoint   POST /api/v1/auth/register
@@ -38,11 +39,29 @@ const register = asyncWrapper(async (req, res) => {
     role,
   ]);
   const user = userRows[0];
+  const userId = user.id;
 
-  res.status(StatusCodes.CREATED).json(user);
+  // Generate token
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
+
+  // Set cookie
+  res.cookie('jwt', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    sameSite: 'strict',
+  });
+
+  res.status(StatusCodes.CREATED).json({ user, token });
 });
 
-const login = async (req, res) => {
+
+// @desc    Login user & get token
+// @endpoint   POST /api/v1/auth/login
+// @access  Public
+const login = asyncWrapper( async (req, res) => {
   const { email, password } = req.body;
 
   // Find user by email
@@ -57,53 +76,42 @@ const login = async (req, res) => {
   // Compare provided password with hashed password
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error('Invalid credentials');
+    throw new CustomError.BadRequestError('Invalid credentials');
   }
 
-  return user;
-};
+  const userId = user.id;
 
-async function updateUser(req, res) {
-  const { userId } = req?.params;
-  const { newName, newPassword, newEmail } = req.body;
-
-  const selectQuery = 'SELECT * FROM users WHERE id = $1';
-
-  const selectRes = await pool.query(selectQuery, [userId]);
-  if (selectRes.rows.length === 0) {
-    console.log('User not found');
-    return;
-  }
-  const userData = selectRes.rows[0];
-  const name = newName || userData.name;
-  const password = newPassword || userData.password;
-  const email = newEmail || userData.email;
-
-  const updateQuery =
-    'UPDATE users SET name = $1, email = $2 password = $3 WHERE id = $4';
-  const updateRes = await pool.query(updateQuery, [
-    name,
-    email,
-    password,
-    userId,
-  ]);
-  const updatedUser = updateRes.rows[0];
-
-  res
-    .status(StatusCodes.OK)
-    .json({ msg: 'user updated', data: updatedUser.rows });
-}
-const logout = async (req, res) => {
-  res.cookie('token', 'logout', {
-    httpOnly: true,
-    expires: new Date(Date.now() + 1000),
+  // Generate token
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
   });
-  res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
+
+  // Set cookie
+  res.cookie('jwt', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    sameSite: 'strict',
+  });
+
+  res.status(StatusCodes.OK).json({ msg:"logged in successful",user, token });
+});
+
+
+
+// @desc    Logout user / clear cookie
+// @route   POST /api/users/logout
+// @access  Public
+const logoutUser = (req, res) => {
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ msg: 'Logged out successfully' });
 };
 
 module.exports = {
   register,
   login,
-  logout,
-  updateUser,
+  logoutUser,
 };
