@@ -1,0 +1,556 @@
+openapi: 3.0.3
+info:
+  title: shop_ease
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: http://localhost
+  - url: https://api.getpostman.com
+paths:
+  /api/v1/auth/register:
+    post:
+      summary: registerUser
+      description: registerUser
+      operationId: registeruser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user18887@gmail.com
+                name:
+                  type: string
+                  example: johndoe
+                password:
+                  type: string
+                  example: '1234'
+            examples:
+              registerUser:
+                value:
+                  email: user18887@gmail.com
+                  name: johndoe
+                  password: '1234'
+      responses:
+        '200':
+          description: ''
+  /api/v1/auth/login:
+    post:
+      summary: loginUser
+      description: loginUser
+      operationId: loginuser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: hezron4@gmail.com
+                password:
+                  type: string
+                  example: '1234'
+            examples:
+              loginUser:
+                value:
+                  email: hezron4@gmail.com
+                  password: '1234'
+      responses:
+        '200':
+          description: ''
+  /api/v1/auth/logout:
+    post:
+      summary: logoutUser
+      description: logoutUser
+      operationId: logoutuser
+      responses:
+        '200':
+          description: ''
+  /api/v1/products:
+    get:
+      summary: getAllProduct
+      description: getAllProduct
+      operationId: getallproduct
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: createProduct
+      description: createProduct
+      operationId: createproduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                averageRating:
+                  type: number
+                  example: 4.5
+                category:
+                  type: string
+                  example: others
+                colors:
+                  type: array
+                  items:
+                    type: string
+                    example: red
+                  example:
+                    - red
+                    - blue
+                    - green
+                company:
+                  type: string
+                  example: others
+                description:
+                  type: string
+                  example: This is a sample product description.
+                discount:
+                  type: number
+                  example: 5
+                featured:
+                  type: boolean
+                  example: true
+                freeShipping:
+                  type: boolean
+                  example: false
+                image:
+                  type: string
+                  example: https://example.com/images/sample-product.jpg
+                inventory:
+                  type: number
+                  example: 100
+                name:
+                  type: string
+                  example: Sample Product 2
+                numOfReviews:
+                  type: number
+                  example: 20
+                price:
+                  type: number
+                  example: 29.99
+            examples:
+              createProduct:
+                value:
+                  averageRating: 4.5
+                  category: others
+                  colors:
+                    - red
+                    - blue
+                    - green
+                  company: others
+                  description: This is a sample product description.
+                  discount: 5
+                  featured: true
+                  freeShipping: false
+                  image: https://example.com/images/sample-product.jpg
+                  inventory: 100
+                  name: Sample Product 2
+                  numOfReviews: 20
+                  price: 29.99
+      responses:
+        '200':
+          description: ''
+  /api/v1/users/user:
+    get:
+      summary: getCurrentUser
+      description: getCurrentUser
+      operationId: getcurrentuser
+      responses:
+        '200':
+          description: ''
+  /api/v1/products/10:
+    patch:
+      summary: updateProduct
+      description: updateProduct
+      operationId: updateproduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                averageRating:
+                  type: number
+                  example: 4.5
+                category:
+                  type: string
+                  example: others
+                colors:
+                  type: array
+                  items:
+                    type: string
+                    example: red
+                  example:
+                    - red
+                    - '#555'
+                    - green
+                company:
+                  type: string
+                  example: others
+                description:
+                  type: string
+                  example: This is a sample product description.
+                discount:
+                  type: number
+                  example: 10
+                featured:
+                  type: boolean
+                  example: true
+                freeShipping:
+                  type: boolean
+                  example: false
+                image:
+                  type: string
+                  example: https://example.com/images/sample-product.jpg
+                inventory:
+                  type: number
+                  example: 100
+                name:
+                  type: string
+                  example: updated
+                numOfReviews:
+                  type: number
+                  example: 20
+                price:
+                  type: number
+                  example: 29.99
+            examples:
+              updateProduct:
+                value:
+                  averageRating: 4.5
+                  category: others
+                  colors:
+                    - red
+                    - '#555'
+                    - green
+                  company: others
+                  description: This is a sample product description.
+                  discount: 10
+                  featured: true
+                  freeShipping: false
+                  image: https://example.com/images/sample-product.jpg
+                  inventory: 100
+                  name: updated
+                  numOfReviews: 20
+                  price: 29.99
+      responses:
+        '200':
+          description: ''
+  /api/v1/products/9:
+    get:
+      summary: getSingleProduct
+      description: getSingleProduct
+      operationId: getsingleproduct
+      responses:
+        '200':
+          description: ''
+    delete:
+      summary: deleteProduct
+      description: deleteProduct
+      operationId: deleteproduct
+      responses:
+        '200':
+          description: ''
+  /api/v1/orders:
+    get:
+      summary: getAllOrder
+      description: getAllOrder
+      operationId: getallorder
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: createOrder
+      description: createOrder
+      operationId: createorder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_secret:
+                  type: string
+                  example: secret_123
+                created_at:
+                  type: string
+                  example: '2023-10-01T00:00:00Z'
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      amount:
+                        type: number
+                        example: 1
+                      color:
+                        type: string
+                        example: red
+                      product:
+                        type: number
+                        example: 8
+                  example:
+                    - amount: 1
+                      color: red
+                      product: 8
+                    - amount: 2
+                      color: blue
+                      product: 6
+                    - amount: 1
+                      color: green
+                      product: 8
+                    - amount: 1
+                      color: yellow
+                      product: 6
+                payment_intent_id:
+                  type: string
+                  example: pi_123
+                shipping_fee:
+                  type: number
+                  example: 5
+                status:
+                  type: string
+                  example: pending
+                subtotal:
+                  type: number
+                  example: 100
+                tax:
+                  type: number
+                  example: 10
+                total:
+                  type: number
+                  example: 115
+                updated_at:
+                  type: string
+                  example: '2023-10-01T00:00:00Z'
+                user_id:
+                  type: number
+                  example: 1
+            examples:
+              createOrder:
+                value:
+                  client_secret: secret_123
+                  created_at: '2023-10-01T00:00:00Z'
+                  items:
+                    - amount: 1
+                      color: red
+                      product: 8
+                    - amount: 2
+                      color: blue
+                      product: 6
+                    - amount: 1
+                      color: green
+                      product: 8
+                    - amount: 1
+                      color: yellow
+                      product: 6
+                  payment_intent_id: pi_123
+                  shipping_fee: 5
+                  status: pending
+                  subtotal: 100
+                  tax: 10
+                  total: 115
+                  updated_at: '2023-10-01T00:00:00Z'
+                  user_id: 1
+      responses:
+        '200':
+          description: ''
+  /api/v1/orders/2:
+    get:
+      summary: getSingleOrder
+      description: getSingleOrder
+      operationId: getsingleorder
+      responses:
+        '200':
+          description: ''
+    patch:
+      summary: updateOrder
+      description: updateOrder
+      operationId: updateorder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: paid
+            examples:
+              updateOrder:
+                value:
+                  status: paid
+      responses:
+        '200':
+          description: ''
+  /api/v1/orders/user:
+    get:
+      summary: getUserOrders
+      description: getUserOrders
+      operationId: getuserorders
+      responses:
+        '200':
+          description: ''
+  /api/v1/reviews:
+    post:
+      summary: createReview
+      description: createReview
+      operationId: createreview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  example: nice product
+                product_id:
+                  type: number
+                  example: 8
+                rating:
+                  type: number
+                  example: 4
+            examples:
+              createReview:
+                value:
+                  comment: nice product
+                  product_id: 8
+                  rating: 4
+      responses:
+        '200':
+          description: ''
+  /api/v1/reviews/8:
+    get:
+      summary: getAllProductReview
+      description: getAllProductReview
+      operationId: getallproductreview
+      responses:
+        '200':
+          description: ''
+  /api/v1/reviews/item/1:
+    get:
+      summary: getSingleReview
+      description: getSingleReview
+      operationId: getsinglereview
+      responses:
+        '200':
+          description: ''
+  /api/v1/reviews/item/12:
+    delete:
+      summary: deleteReview
+      description: deleteReview
+      operationId: deletereview
+      responses:
+        '200':
+          description: ''
+    patch:
+      summary: updateReview
+      description: updateReview
+      operationId: updatereview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  example: what a  product!
+                rating:
+                  type: number
+                  example: 4.8
+            examples:
+              updateReview:
+                value:
+                  comment: what a  product!
+                  rating: 4.8
+      responses:
+        '200':
+          description: ''
+  /api/v1/users:
+    get:
+      summary: getAllUsers
+      description: getAllUsers
+      operationId: getallusers
+      responses:
+        '200':
+          description: ''
+    patch:
+      summary: updateUser
+      description: updateUser
+      operationId: updateuser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: hezron4@gmail.com
+                name:
+                  type: string
+                  example: john junior
+            examples:
+              updateUser:
+                value:
+                  email: hezron4@gmail.com
+                  name: john junior
+      responses:
+        '200':
+          description: ''
+  /api/v1/users/4:
+    get:
+      summary: getSingleUser
+      description: getSingleUser
+      operationId: getsingleuser
+      responses:
+        '200':
+          description: ''
+  /api/v1/users/update-password/6:
+    patch:
+      summary: updateUserPassword
+      description: updateUserPassword
+      operationId: updateuserpassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newPassword:
+                  type: string
+                  example: '123456'
+                oldPassword:
+                  type: string
+                  example: '1234'
+            examples:
+              updateUserPassword:
+                value:
+                  newPassword: '123456'
+                  oldPassword: '1234'
+      responses:
+        '200':
+          description: ''
+  /collections/31772460-c8a5245b-4f0a-4eac-8eda-512829d3f3b9:
+    get:
+      summary: docs
+      description: docs
+      operationId: docs
+      responses:
+        '200':
+          description: ''
+      security:
+        - apiKey: []
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+tags: []

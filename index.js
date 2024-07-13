@@ -4,7 +4,17 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
-app.use(cookieParser());
+
+// extra security packages
+const helmet = require('helmet');
+const cors = require('cors');
+const xss = require('xss-clean');
+const rateLimiter = require('express-rate-limit');
+
+// Swagger
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 // database
 const { connectionDB } = require('./connectDB');
@@ -17,6 +27,17 @@ const reviewsRoutes = require('./routes/reviewsRoutes.js');
 const userRoutes = require('./routes/userRoutes.js');
 
 // Middlewares
+app.set('trust proxy', 1);
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+  })
+);
+app.use(helmet());
+app.use(cors());
+app.use(xss());
+app.use(cookieParser());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,9 +53,12 @@ app.use('/api/v1/orders', ordersRoutes);
 app.use('/api/v1/reviews', reviewsRoutes);
 app.use('/api/v1/users', userRoutes);
 
+// api documentation
 app.get('/', (req, res) => {
-  res.send('shop ease api');
+  res.send('<h1>SHOP EASE API</h1><a href="/api-docs">Documentation</a>');
 });
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);
 
