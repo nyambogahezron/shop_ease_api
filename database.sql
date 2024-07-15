@@ -1,4 +1,5 @@
-// database schema // Create a table for users CREATE TABLE users (
+--  database schema Create a table for users 
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL CHECK (char_length(name) >= 3),
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -7,7 +8,10 @@
 );
 ALTER TABLE users
 ADD CONSTRAINT email_format_check CHECK (email ~* '^[^@]+@[^@]+\.[^@]{2,}$');
-// Create a table for products CREATE TABLE products (
+
+
+--  Create a table for products
+CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     price NUMERIC DEFAULT 0 NOT NULL,
@@ -25,8 +29,7 @@ ADD CONSTRAINT email_format_check CHECK (email ~* '^[^@]+@[^@]+\.[^@]{2,}$');
     averageRating NUMERIC DEFAULT 0,
     numOfReviews INTEGER DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_user FOREIGN KEY("user") REFERENCES users(id)
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 -- Create a trigger to update the updated_at column on update
 CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW();
@@ -35,10 +38,9 @@ END;
 $$ language 'plpgsql';
 CREATE TRIGGER update_products_updated_at BEFORE
 UPDATE ON products FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-// remove user column
-from products table
-ALTER TABLE products DROP COLUMN user;
-// Create a table for single order CREATE TABLE single_order (
+
+--  Create a table for single order
+CREATE TABLE single_order (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     image VARCHAR(255) NOT NULL,
@@ -49,7 +51,8 @@ ALTER TABLE products DROP COLUMN user;
     product_id INTEGER NOT NULL,
     product INTEGER NOT NULL REFERENCES products(id)
 );
-// Create a table for orders CREATE TABLE orders (
+-- Create a table for orders 
+CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     tax NUMERIC NOT NULL,
     shipping_fee NUMERIC NOT NULL,
@@ -71,6 +74,7 @@ ALTER TABLE products DROP COLUMN user;
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     order_items JSONB NOT NULL
 );
+-- Create a table for reviews
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
