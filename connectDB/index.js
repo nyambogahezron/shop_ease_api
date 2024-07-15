@@ -1,13 +1,15 @@
 const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'shop_ease',
+  user: process.env.user,
+  host: process.env.host,
+  database: process.env.database,
   password: process.env.password,
-  port: 5432,
+  port: process.env.PORT,
 });
 
+// connect to the database
 const connectionDB = () => {
   pool.connect((err, client, release) => {
     if (err) {
@@ -23,10 +25,10 @@ const connectionDB = () => {
         console.error('Error executing query', err.stack);
         return;
       }
-    //   log server time 
+      //   log server time
       console.log(result.rows);
     });
   });
 };
 
-module.exports = { connectionDB, pool};
+module.exports = { connectionDB, pool };
