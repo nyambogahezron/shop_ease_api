@@ -9,6 +9,7 @@ const asyncWrapper = require('../middleware/asyncHandler');
 // @access  Private/Admin
 
 const createProduct = asyncWrapper(async (req, res) => {
+ 
   const {
     name,
     price,
@@ -26,7 +27,7 @@ const createProduct = asyncWrapper(async (req, res) => {
   } = req.body;
 
   const query = `
-    INSERT INTO products (name, price, discount, description, image, category, company, colors, featured, freeShipping, inventory, averageRating, numOfReviews)
+    INSERT INTO products (name, price, discount, description, image, category, company, colors, featured, freShipping, inventory, average_rating, num_of_reviews)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     RETURNING *;
   `;
@@ -50,7 +51,6 @@ const createProduct = asyncWrapper(async (req, res) => {
   const product = result.rows[0];
   res.status(StatusCodes.CREATED).json({ product });
 });
-
 // @desc   get all products
 // @endpoint   GET /api/v1/auth/products
 // @access  Public
@@ -104,7 +104,7 @@ const updateProduct = asyncWrapper(async (req, res) => {
 
   const query = `
     UPDATE products
-    SET name = $1, price = $2, discount = $3, description = $4, image = $5, category = $6, company = $7, colors = $8, featured = $9, freeShipping = $10, inventory = $11, averageRating = $12, numOfReviews = $13, updated_at = CURRENT_TIMESTAMP
+    SET name = $1, price = $2, discount = $3, description = $4, image = $5, category = $6, company = $7, colors = $8, featured = $9, freShipping = $10, inventory = $11, average_rating = $12, num_of_reviews = $13, updated_at = CURRENT_TIMESTAMP
     WHERE id = $14
     RETURNING *;
   `;
