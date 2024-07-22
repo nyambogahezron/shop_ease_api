@@ -110,13 +110,25 @@ const updatePassword = asyncWrapper(async (req, res) => {
 // @access  Private
 
 const getCurrentUser = asyncWrapper(async (req, res) => {
-  req.user;
+  const id = req.user.id;
 
-  if (!req.user) {
+  if (!user) {
     throw new CustomError.NotFoundError('No user found');
   }
 
-  res.status(StatusCodes.OK).json(req.user.id, req.user.name, req.user.email);
+  if (typeof user.id !== 'number') {
+    throw new CustomError.BadRequestError('Invalid user ID');
+  }
+
+  const selectQuery = 'SELECT * FROM users WHERE id = $1';
+  const selectRes = await pool.query(selectQuery, [id]);
+
+  if (selectRes.rows.length === 0) {
+    throw new CustomError.NotFoundError(`No user with id : ${id}`);
+  }
+  const user = selectRes.rows[0];
+
+  res.status(StatusCodes.OK).json(user);
 });
 
 module.exports = {

@@ -7,6 +7,7 @@ servers:
   - url: http://localhost:5000
     description: Local server
   - url: https://api.getpostman.com
+    description: Postman server
 paths:
   /api/v1/auth/register:
     post:
@@ -50,15 +51,15 @@ paths:
               properties:
                 email:
                   type: string
-                  example: hezron4@gmail.com
+                  example: hezron@gmail.com
                 password:
                   type: string
-                  example: '1234'
+                  example: '12345'
             examples:
               loginUser:
                 value:
-                  email: hezron4@gmail.com
-                  password: '1234'
+                  email: hezron@gmail.com
+                  password: '12345'
       responses:
         '200':
           description: ''
@@ -101,11 +102,11 @@ paths:
                     example: red
                   example:
                     - red
-                    - blue
+                    - green
                     - green
                 company:
                   type: string
-                  example: others
+                  example: nike
                 description:
                   type: string
                   example: This is a sample product description.
@@ -126,13 +127,13 @@ paths:
                   example: 100
                 name:
                   type: string
-                  example: Sample Product 2
+                  example: Sport shoe
                 numOfReviews:
                   type: number
                   example: 20
                 price:
                   type: number
-                  example: 29.99
+                  example: 59.99
             examples:
               createProduct:
                 value:
@@ -140,18 +141,18 @@ paths:
                   category: others
                   colors:
                     - red
-                    - blue
                     - green
-                  company: others
+                    - green
+                  company: nike
                   description: This is a sample product description.
                   discount: 5
                   featured: true
                   freeShipping: false
                   image: https://example.com/images/sample-product.jpg
                   inventory: 100
-                  name: Sample Product 2
+                  name: Sport shoe
                   numOfReviews: 20
-                  price: 29.99
+                  price: 59.99
       responses:
         '200':
           description: ''
@@ -164,6 +165,13 @@ paths:
         '200':
           description: ''
   /api/v1/products/10:
+    get:
+      summary: getSingleProduct
+      description: getSingleProduct
+      operationId: getsingleproduct
+      responses:
+        '200':
+          description: ''
     patch:
       summary: updateProduct
       description: updateProduct
@@ -187,17 +195,17 @@ paths:
                     example: red
                   example:
                     - red
-                    - '#555'
+                    - green
                     - green
                 company:
                   type: string
-                  example: others
+                  example: nike
                 description:
                   type: string
                   example: This is a sample product description.
                 discount:
                   type: number
-                  example: 10
+                  example: 5
                 featured:
                   type: boolean
                   example: true
@@ -212,13 +220,13 @@ paths:
                   example: 100
                 name:
                   type: string
-                  example: updated
+                  example: Sport shoe
                 numOfReviews:
                   type: number
                   example: 20
                 price:
                   type: number
-                  example: 29.99
+                  example: 59.99
             examples:
               updateProduct:
                 value:
@@ -226,29 +234,22 @@ paths:
                   category: others
                   colors:
                     - red
-                    - '#555'
                     - green
-                  company: others
+                    - green
+                  company: nike
                   description: This is a sample product description.
-                  discount: 10
+                  discount: 5
                   featured: true
                   freeShipping: false
                   image: https://example.com/images/sample-product.jpg
                   inventory: 100
-                  name: updated
+                  name: Sport shoe
                   numOfReviews: 20
-                  price: 29.99
+                  price: 59.99
       responses:
         '200':
           description: ''
-  /api/v1/products/9:
-    get:
-      summary: getSingleProduct
-      description: getSingleProduct
-      operationId: getsingleproduct
-      responses:
-        '200':
-          description: ''
+  /api/v1/products/18:
     delete:
       summary: deleteProduct
       description: deleteProduct
@@ -368,6 +369,7 @@ paths:
       responses:
         '200':
           description: ''
+  /api/v1/orders/8:
     patch:
       summary: updateOrder
       description: updateOrder
@@ -412,7 +414,7 @@ paths:
                   example: nice product
                 product_id:
                   type: number
-                  example: 8
+                  example: 10
                 rating:
                   type: number
                   example: 4
@@ -420,7 +422,7 @@ paths:
               createReview:
                 value:
                   comment: nice product
-                  product_id: 8
+                  product_id: 10
                   rating: 4
       responses:
         '200':
