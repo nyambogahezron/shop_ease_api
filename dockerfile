@@ -13,6 +13,16 @@ RUN npm install --production
 
 COPY --from=builder /usr/app/dist ./dist
 COPY .env ./
+
+WORKDIR ./
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+
 EXPOSE 5000
 
 # Define the command to run your application
